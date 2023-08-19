@@ -1,9 +1,35 @@
-import { View, Text } from 'react-native'
+import { View, Text, SafeAreaView, StyleSheet } from 'react-native'
+import { Button } from '../../components/Button'
+import { useNavigation } from '@react-navigation/native'
+import { StackType } from '../../routes/Index'
+import { Center, VStack } from 'native-base'
 
 export default function Home() {
+  const navigation = useNavigation<StackType>()
   return (
-    <View style={{ marginTop: 60 }}>
-      <Text style={{ textAlign: 'center' }}>Home</Text>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <Center height={'full'}>
+        <VStack width={'60%'} height={'50%'}>
+          <Button title='Home' mb={3} />
+          <Button
+            title='Perfil'
+            mb={3}
+            onPress={() => navigation.navigate('Perfil')}
+          />
+          <Button title='Configurações' mb={3} />
+          <Button
+            title='Sair'
+            onPress={() => navigation.navigate('Login')}
+          />
+        </VStack>
+      </Center>
+    </SafeAreaView>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#dbf4ff'
+  }
+})

@@ -5,10 +5,9 @@ import { background } from 'native-base/lib/typescript/theme/styled-system'
 export function Input({ ...rest }: IInputProps) {
   return (
     <NBInput
-      bg='gray.700'
+      bg='gray.200'
       fontSize='md'
       h={16}
-      mb={4}
       _focus={
         {
           bg: 'gray.300',

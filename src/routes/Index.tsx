@@ -3,12 +3,14 @@ import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-na
 import { NativeBaseProvider } from 'native-base'
 import Home from '../screens/Home/Home'
 import Login from '../screens/Login/Login'
+import Perfil from '../screens/Perfil/Perfil'
 
 const Stack = createNativeStackNavigator();
 
 type RootStackParamList = {
-  Login: undefined;
-  Home: undefined;
+  Login: undefined
+  Home: undefined
+  Perfil: undefined
 }
 
 export type StackType = NativeStackNavigationProp<RootStackParamList>;
@@ -20,6 +22,7 @@ export default function Routes() {
         <Stack.Navigator>
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
           <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
+          <Stack.Screen name="Perfil" component={Perfil} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NativeBaseProvider>
     </NavigationContainer>
