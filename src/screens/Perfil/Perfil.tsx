@@ -5,16 +5,9 @@ import Header from "../../components/Header"
 export default function Perfil() {
   return (
     <>
-      <Header />
-      <SafeAreaView style={styles.container}>
-      </SafeAreaView>
+      <Header color="#dbf4ff" />
+      {/* <SafeAreaView style={styles.container}> */}
+      {/* </SafeAreaView> */}
     </>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#dbf4ff'
-  }
-})
