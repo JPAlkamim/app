@@ -1,20 +1,17 @@
-import React, { useEffect } from 'react'
-import { View, Dimensions } from 'react-native'
+import { useState, useEffect } from 'react'
+import { View, Dimensions, SafeAreaView, TouchableOpacity } from 'react-native'
 import Api from '../../services/api'
-import { HStack, VStack } from 'native-base'
+import { HStack, VStack, Text } from 'native-base'
 import Header from '../../components/Header'
 import { BoardGameView } from './BoardGameView'
 import { ActivityIndicator, StyleSheet } from 'react-native'
 import { FlashList } from '@shopify/flash-list'
 
-type FilterProps = {
-
-}
 
 export default function BoardGame() {
-  const [response, setResponse] = React.useState<any>('')
-  const [search, setSearch] = React.useState<string>('0')
-  const [loading, setLoading] = React.useState<boolean>(true)
+  const [response, setResponse] = useState<any>('')
+  const [loading, setLoading] = useState<boolean>(true)
+  const [filter, setFilter] = useState<string>('')
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
 
@@ -23,31 +20,35 @@ export default function BoardGame() {
   }, [])
 
   const handleSearchApi = async () => {
-    await Api.get('search?order_by=rank&limit=10&skip=' + search + '&client_id=wv5Ijw7bki')
+    await Api.get(`search?order_by=rank&limit=4&client_id=wv5Ijw7bki`)
       .then(response => {
         setResponse(response.data.games)
       })
     setLoading(false)
   }
 
-  const handleSearch = async () => {
+  const handleSearch = async (page: string) => {
     setLoading(true)
-    const nextSearch = parseInt(search) + 10
-    await Api.get('search?order_by=rank&limit=10&skip=' + String(nextSearch) + '&client_id=wv5Ijw7bki')
-      .then(response => {
-        setResponse((prevGames: any) => [...prevGames, ...response.data.games])
-      })
-    setSearch(String(nextSearch))
+    if (filter === '') {
+      await Api.get(`search?order_by=rank&limit=4&skip=${page}&client_id=wv5Ijw7bki`)
+        .then(response => {
+          setResponse(response.data.games)
+        })
+    } else {
+      await Api.get(`search?order_by=${filter}&limit=4&skip=${page}&client_id=wv5Ijw7bki`)
+        .then(response => {
+          setResponse(response.data.games)
+        })
+    }
     setLoading(false)
   }
 
   const handleFilter = async (filter: string) => {
-    setLoading(true)
-    await Api.get('search?order_by=' + filter + '&limit=10&skip=' + search + '&client_id=wv5Ijw7bki')
+    setFilter(filter)
+    await Api.get(`search?order_by=${filter}&limit=4&&client_id=wv5Ijw7bki`)
       .then(response => {
         setResponse(response.data.games)
       })
-    setLoading(false)
   }
 
   const renderItem = (item: any) => {
@@ -58,20 +59,39 @@ export default function BoardGame() {
     )
   }
 
-  const loadBlue = () => {
-    return (
-      <View style={{ position: 'absolute', left: (windowWidth - 30) / 2, top: (windowHeight - 200) / 2 }}>
-        {loading && response.length === 0 ? <ActivityIndicator size="large" color="#0e7490" /> : null}
-      </View>
-    )
+  const setPage = (page: string) => {
+    handleSearch(page)
   }
 
-  const getShowMore = () => {
-    if (response.length > 0) {
+  const renderFooterPage = () => {
+    if (!loading) {
       return (
-        <VStack justifyContent="center" alignItems="center" flex={1} position={'relative'} bottom={5}>
-          {loading ? <ActivityIndicator color="black" size={20} /> : null}
-        </VStack>
+        <HStack justifyContent={'center'} >
+          <TouchableOpacity onPress={() => setPage('0')}>
+            <Text p={5} fontSize={24}>0</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setPage('4')}>
+            <Text p={5} fontSize={24}>1</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setPage('8')}>
+            <Text p={5} fontSize={24}>2</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setPage('12')}>
+            <Text p={5} fontSize={24}>3</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setPage('16')}>
+            <Text p={5} fontSize={24}>4</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setPage('20')}>
+            <Text p={5} fontSize={24}>5</Text>
+          </TouchableOpacity>
+        </HStack>
+      )
+    } else {
+      return (
+        <View>
+          <ActivityIndicator size="large" color='#0891b2' />
+        </View>
       )
     }
   }
@@ -79,17 +99,14 @@ export default function BoardGame() {
   return (
     <>
       <Header color={'#0891b2'} isListBoardGame={true} filter={handleFilter} />
-      <HStack backgroundColor={'info.100'} h={'89%'}>
-        {loadBlue()}
+      <HStack backgroundColor={'info.100'} height={'100%'} maxHeight={windowHeight - 100}>
         <FlashList
           data={response}
           renderItem={({ item }) => renderItem(item)}
           estimatedItemSize={170}
-          onEndReached={handleSearch}
-          onEndReachedThreshold={0.1}
+          ListFooterComponent={renderFooterPage()}
         />
       </HStack>
-      {getShowMore()}
     </>
   )
 }
