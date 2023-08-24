@@ -6,7 +6,8 @@ import Header from '../../components/Header'
 import { BoardGameView } from './BoardGameView'
 import { ActivityIndicator, StyleSheet } from 'react-native'
 import { FlashList } from '@shopify/flash-list'
-
+import BoardGameService from './services/BoardGameService'
+import * as Animatable from 'react-native-animatable'
 
 export default function BoardGame() {
   const [response, setResponse] = useState<any>('')

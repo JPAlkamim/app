@@ -3,6 +3,7 @@ import { Button } from '../../components/Button'
 import { useNavigation } from '@react-navigation/native'
 import { StackType } from '../../routes/Index'
 import { Center, StatusBar, VStack } from 'native-base'
+import * as Animatable from 'react-native-animatable'
 
 export default function Home() {
   const navigation = useNavigation<StackType>()
@@ -11,11 +12,15 @@ export default function Home() {
       <StatusBar barStyle='dark-content' />
       <Center height={'full'}>
         <VStack width={'60%'} height={'50%'}>
-          <Button
-            title='Jogos de Tabuleiro'
-            mb={3}
-            onPress={() => navigation.navigate('BoardGame')}
-          />
+          <Animatable.View
+            animation='fadeInUp'
+          >
+            <Button
+              title='Jogos de Tabuleiro'
+              mb={3}
+              onPress={() => navigation.navigate('BoardGame')}
+            />
+          </Animatable.View>
           <Button
             title='Perfil'
             mb={3}

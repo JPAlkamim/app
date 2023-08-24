@@ -1,4 +1,5 @@
 import { Button as NBButton, IButtonProps, Text } from "native-base"
+import * as Animatable from 'react-native-animatable'
 
 type Props = IButtonProps & {
   title: string
@@ -24,3 +25,5 @@ export function Button({ title, ...rest }: Props) {
     </NBButton>
   )
 }
+
+export default Animatable.createAnimatableComponent(Button)
